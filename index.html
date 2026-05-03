@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Étoile | Nhà hàng cao cấp</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        gold: {
+                            DEFAULT: '#D4AF37',
+                            light: '#F3E5AB',
+                            dark: '#AA8C2C',
+                        },
+                        dark: {
+                            DEFAULT: '#111111',
+                            lighter: '#1A1A1A',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles & Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .menu-item {
+            transition: all 0.4s ease;
+        }
+        
+        .menu-item.hide {
+            display: none;
+            opacity: 0;
+        }
+        
+        /* Glassmorphism for Navbar */
+        .glass-nav {
+            background: rgba(17, 17, 17, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Image hover effect */
+        .img-hover-zoom {
+            overflow: hidden;
+        }
+        .img-hover-zoom img {
+            transition: transform 0.5s ease;
+        }
+        .img-hover-zoom:hover img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-dark text-gray-300 font-sans antialiased overflow-x-hidden">
+
+    <!-- 1. Navbar Section -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="text-2xl md:text-3xl font-serif text-gold font-bold tracking-wider">
+                L'Étoile<span class="text-white text-xl">.</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#home" class="text-sm uppercase tracking-widest hover:text-gold transition-colors">Trang chủ</a>
+                <a href="#about" class="text-sm uppercase tracking-widest hover:text-gold transition-colors">Về chúng tôi</a>
+                <a href="#menu" class="text-sm uppercase tracking-widest hover:text-gold transition-colors">Thực đơn</a>
+                <a href="#reservation" class="px-6 py-2 border border-gold text-gold hover:bg-gold hover:text-dark transition-all duration-300 uppercase text-sm tracking-widest">Đặt bàn</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+                <button id="mobile-menu-btn" class="text-white focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden fixed inset-0 bg-dark z-40 flex flex-col items-center justify-center space-y-8 transform translate-x-full transition-transform duration-300">
+            <button id="close-menu-btn" class="absolute top-6 right-6 text-white focus:outline-none">
+                <i class="fas fa-times text-3xl"></i>
+            </button>
+            <a href="#home" class="mobile-link text-xl uppercase tracking-widest hover:text-gold transition-colors">Trang chủ</a>
+            <a href="#about" class="mobile-link text-xl uppercase tracking-widest hover:text-gold transition-colors">Về chúng tôi</a>
+            <a href="#menu" class="mobile-link text-xl uppercase tracking-widest hover:text-gold transition-colors">Thực đơn</a>
+            <a href="#reservation" class="mobile-link px-8 py-3 border border-gold text-gold hover:bg-gold hover:text-dark transition-all duration-300 uppercase tracking-widest">Đặt bàn</a>
+        </div>
+    </nav>
+
+    <!-- 2. Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center">
+        <!-- Background Image -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?q=80&w=2070&auto=format&fit=crop" alt="Restaurant Interior" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black bg-opacity-60"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto reveal">
+            <span class="text-gold tracking-[0.3em] uppercase text-sm md:text-base font-semibold block mb-4">Trải nghiệm ẩm thực</span>
+            <h1 class="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight">Nghệ thuật trong từng <br><span class="italic font-light">Hương vị</span></h1>
+            <p class="text-gray-300 mb-10 text-lg md:text-xl font-light max-w-2xl mx-auto">Khám phá sự giao thoa tinh tế giữa nguyên liệu thượng hạng và kỹ thuật nấu nướng đỉnh cao tại không gian sang trọng bậc nhất.</p>
+            <a href="#menu" class="px-8 py-4 bg-gold text-dark font-semibold uppercase tracking-widest hover:bg-white transition-colors duration-300 inline-block">Xem thực đơn</a>
+        </div>
+    </section>
+
+    <!-- 3. About Section -->
+    <section id="about" class="py-24 bg-dark-lighter">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <!-- Image -->
+                <div class="w-full md:w-1/2 reveal img-hover-zoom">
+                    <img src="https://images.unsplash.com/photo-1577106263724-2c8e03bfe9cf?q=80&w=2070&auto=format&fit=crop" alt="Chef cooking" class="w-full h-[500px] object-cover shadow-2xl">
+                </div>
+                <!-- Text -->
+                <div class="w-full md:w-1/2 reveal" style="transition-delay: 0.2s;">
+                    <span class="text-gold tracking-[0.2em] uppercase text-sm font-semibold block mb-4">Câu chuyện của chúng tôi</span>
+                    <h2 class="text-4xl md:text-5xl font-serif text-white mb-6">Đam mê & <br>Sáng tạo</h2>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        Được thành lập từ năm 2010, L'Étoile không chỉ là một nhà hàng, mà là một hành trình tôn vinh các giác quan. Dưới sự dẫn dắt của Bếp trưởng Michelin, mỗi món ăn là một tác phẩm nghệ thuật kể câu chuyện về văn hóa và nguyên liệu bản địa.
+                    </p>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        Chúng tôi cam kết sử dụng nguồn nguyên liệu hữu cơ tươi ngon nhất mỗi ngày, kết hợp với kỹ thuật chế biến hiện đại để mang đến trải nghiệm ẩm thực khó quên.
+                    </p>
+                    <!-- Chữ ký giả lập -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Signature_of_Gordon_Ramsay.png" alt="Signature" class="h-12 invert opacity-70">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Menu Section -->
+    <section id="menu" class="py-24 bg-dark">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="text-center mb-16 reveal">
+                <span class="text-gold tracking-[0.2em] uppercase text-sm font-semibold block mb-4">Khám phá</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-white">Thực đơn nổi bật</h2>
+                <div class="w-24 h-1 bg-gold mx-auto mt-6"></div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 reveal" style="transition-delay: 0.2s;">
+                <button class="filter-btn active text-white border-b-2 border-gold pb-1 uppercase tracking-wider text-sm font-semibold" data-filter="all">Tất cả</button>
+                <button class="filter-btn text-gray-500 hover:text-white border-b-2 border-transparent hover:border-white pb-1 uppercase tracking-wider text-sm transition-all" data-filter="starter">Khai vị</button>
+                <button class="filter-btn text-gray-500 hover:text-white border-b-2 border-transparent hover:border-white pb-1 uppercase tracking-wider text-sm transition-all" data-filter="main">Món chính</button>
+                <button class="filter-btn text-gray-500 hover:text-white border-b-2 border-transparent hover:border-white pb-1 uppercase tracking-wider text-sm transition-all" data-filter="dessert">Tráng miệng</button>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 reveal" style="transition-delay: 0.4s;" id="menu-grid">
+                
+                <!-- Item 1 (Khai vị) -->
+                <div class="menu-item starter group">
+                    <div class="img-hover-zoom mb-6 h-64 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1600803907087-f56d462fd26b?q=80&w=1927&auto=format&fit=crop" alt="Carpaccio" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <span class="text-gold font-serif italic text-xl">Đặc sắc</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-baseline mb-2 border-b border-gray-800 pb-2">
+                        <h3 class="text-xl font-serif text-white">Bò Wagyu Carpaccio</h3>
+                        <span class="text-gold font-bold">$35</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Bò Wagyu A5 thái mỏng, nấm truffle đen, phô mai parmesan, dầu oliu nguyên chất.</p>
+                </div>
+
+                <!-- Item 2 (Khai vị) -->
+                <div class="menu-item starter group">
+                    <div class="img-hover-zoom mb-6 h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1544025162-811114cd354c?q=80&w=2069&auto=format&fit=crop" alt="Scallops" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-baseline mb-2 border-b border-gray-800 pb-2">
+                        <h3 class="text-xl font-serif text-white">Sò Điệp Hokkaido</h3>
+                        <span class="text-gold font-bold">$28</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Sò điệp áp chảo, sốt bơ chanh, trứng cá tầm caviar, puree súp lơ.</p>
+                </div>
+
+                <!-- Item 3 (Món chính) -->
+                <div class="menu-item main group">
+                    <div class="img-hover-zoom mb-6 h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=2069&auto=format&fit=crop" alt="Steak" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-baseline mb-2 border-b border-gray-800 pb-2">
+                        <h3 class="text-xl font-serif text-white">Thăn Nội Bò Angus</h3>
+                        <span class="text-gold font-bold">$85</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Thăn bò nướng than hoa, măng tây, khoai tây nghiền truffle, sốt rượu vang đỏ.</p>
+                </div>
+
+                <!-- Item 4 (Món chính) -->
+                <div class="menu-item main group">
+                    <div class="img-hover-zoom mb-6 h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=2070&auto=format&fit=crop" alt="Salmon" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-baseline mb-2 border-b border-gray-800 pb-2">
+                        <h3 class="text-xl font-serif text-white">Cá Hồi Na Uy Áp Chảo</h3>
+                        <span class="text-gold font-bold">$45</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Cá hồi tươi, sốt kem thì là, măng tây nướng, cà chua cherry confit.</p>
+                </div>
+
+                <!-- Item 5 (Món chính) -->
+                <div class="menu-item main group">
+                    <div class="img-hover-zoom mb-6 h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1633504581786-316c8002b1b9?q=80&w=2070&auto=format&fit=crop" alt="Lobster Pasta" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-baseline mb-2 border-b border-gray-800 pb-2">
+                        <h3 class="text-xl font-serif text-white">Mỳ Ý Tôm Hùm</h3>
+                        <span class="text-gold font-bold">$65</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Mỳ linguine tự làm, tôm hùm Maine, sốt cà chua cay nhẹ, húng quế.</p>
+                </div>
+
+                <!-- Item 6 (Tráng miệng) -->
+                <div class="menu-item dessert group">
+                    <div class="img-hover-zoom mb-6 h-64 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1563805042-7684c8e9e1cb?q=80&w=1854&auto=format&fit=crop" alt="Chocolate Lava" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex justify-between items-baseline mb-2 border-b border-gray-800 pb-2">
+                        <h3 class="text-xl font-serif text-white">Lava Chocolate Valrhona</h3>
+                        <span class="text-gold font-bold">$22</span>
+                    </div>
+                    <p class="text-gray-500 text-sm">Bánh socola tan chảy, kem vanilla Madagascar, quả mọng tươi, vàng lá 24k.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Reservation Section -->
+    <section id="reservation" class="relative py-24 bg-dark-lighter">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=2070&auto=format&fit=crop" alt="Restaurant tables" class="w-full h-full object-cover opacity-20">
+        </div>
+        
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="max-w-3xl mx-auto bg-dark p-8 md:p-12 shadow-2xl reveal border border-gray-800">
+                <div class="text-center mb-10">
+                    <span class="text-gold tracking-[0.2em] uppercase text-sm font-semibold block mb-3">Giữ chỗ ngay</span>
+                    <h2 class="text-3xl md:text-4xl font-serif text-white">Đặt Bàn</h2>
+                </div>
+
+                <form id="reservation-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <input type="text" id="name" placeholder="Họ và tên" class="w-full bg-transparent border-b border-gray-600 py-3 text-white focus:outline-none focus:border-gold transition-colors" required>
+                            <span class="text-red-500 text-xs hidden mt-1" id="name-error">Vui lòng nhập tên.</span>
+                        </div>
+                        <div>
+                            <input type="email" id="email" placeholder="Email" class="w-full bg-transparent border-b border-gray-600 py-3 text-white focus:outline-none focus:border-gold transition-colors" required>
+                            <span class="text-red-500 text-xs hidden mt-1" id="email-error">Vui lòng nhập email hợp lệ.</span>
+                        </div>
+                        <div>
+                            <input type="tel" id="phone" placeholder="Số điện thoại" class="w-full bg-transparent border-b border-gray-600 py-3 text-white focus:outline-none focus:border-gold transition-colors" required>
+                            <span class="text-red-500 text-xs hidden mt-1" id="phone-error">Vui lòng nhập số điện thoại.</span>
+                        </div>
+                        <div>
+                            <select id="guests" class="w-full bg-dark text-gray-400 border-b border-gray-600 py-3 focus:outline-none focus:border-gold transition-colors appearance-none" required>
+                                <option value="" disabled selected>Số người</option>
+                                <option value="1">1 Người</option>
+                                <option value="2">2 Người</option>
+                                <option value="3">3 Người</option>
+                                <option value="4">4 Người</option>
+                                <option value="5+">5+ Người</option>
+                            </select>
+                        </div>
+                        <div>
+                            <input type="date" id="date" class="w-full bg-transparent border-b border-gray-600 py-3 text-gray-400 focus:outline-none focus:border-gold transition-colors" required>
+                        </div>
+                        <div>
+                            <select id="time" class="w-full bg-dark text-gray-400 border-b border-gray-600 py-3 focus:outline-none focus:border-gold transition-colors appearance-none" required>
+                                <option value="" disabled selected>Thời gian</option>
+                                <option value="18:00">18:00</option>
+                                <option value="19:00">19:00</option>
+                                <option value="20:00">20:00</option>
+                                <option value="21:00">21:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <textarea id="message" rows="3" placeholder="Ghi chú đặc biệt (Dị ứng, Kỷ niệm...)" class="w-full bg-transparent border-b border-gray-600 py-3 text-white focus:outline-none focus:border-gold transition-colors"></textarea>
+                    </div>
+                    <div class="text-center pt-4">
+                        <button type="submit" class="px-10 py-4 bg-gold text-dark font-semibold uppercase tracking-widest hover:bg-white transition-colors duration-300 w-full md:w-auto">Xác nhận đặt bàn</button>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <div id="form-success" class="hidden text-center text-green-500 mt-4 p-3 border border-green-500 bg-green-500 bg-opacity-10">
+                        Đặt bàn thành công! Chúng tôi sẽ liên hệ lại sớm nhất.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Footer Section -->
+    <footer class="bg-dark border-t border-gray-900 pt-16 pb-8">
+        <div class="container mx-auto px-6 md:px-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left mb-12">
+                <!-- Brand -->
+                <div>
+                    <h3 class="text-3xl font-serif text-gold mb-6">L'Étoile.</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed mb-6">Trải nghiệm ẩm thực Pháp đương đại trong không gian tinh tế và sang trọng giữa lòng thành phố.</p>
+                    <div class="flex justify-center md:justify-start space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-gold hover:border-gold transition-all"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-gold hover:border-gold transition-all"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-gray-700 flex items-center justify-center text-gray-400 hover:text-gold hover:border-gold transition-all"><i class="fab fa-tripadvisor"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-white uppercase tracking-widest text-sm font-semibold mb-6">Liên hệ</h4>
+                    <ul class="text-gray-500 text-sm space-y-4">
+                        <li class="flex items-start justify-center md:justify-start gap-3">
+                            <i class="fas fa-map-marker-alt text-gold mt-1"></i>
+                            <span>123 Đường Nguyễn Huệ, Quận 1<br>TP. Hồ Chí Minh, Việt Nam</span>
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fas fa-phone text-gold"></i>
+                            <span>+84 123 456 789</span>
+                        </li>
+                        <li class="flex items-center justify-center md:justify-start gap-3">
+                            <i class="fas fa-envelope text-gold"></i>
+                            <span>reservation@letoile.com</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Hours -->
+                <div>
+                    <h4 class="text-white uppercase tracking-widest text-sm font-semibold mb-6">Giờ mở cửa</h4>
+                    <ul class="text-gray-500 text-sm space-y-4">
+                        <li class="flex justify-between border-b border-gray-800 pb-2">
+                            <span>Thứ Hai - Thứ Sáu</span>
+                            <span class="text-white">18:00 - 23:00</span>
+                        </li>
+                        <li class="flex justify-between border-b border-gray-800 pb-2">
+                            <span>Thứ Bảy - Chủ Nhật</span>
+                            <span class="text-white">17:00 - 23:30</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="text-center border-t border-gray-800 pt-8 text-gray-600 text-sm">
+                <p>&copy; 2026 L'Étoile Restaurant. Thiết kế chuẩn UI/UX.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 7. Scroll to Top Button -->
+    <button id="scrollToTop" class="fixed bottom-8 right-8 bg-gold text-dark w-12 h-12 rounded-full flex items-center justify-center shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 hover:bg-white focus:outline-none">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript Xử Lý Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Sticky Navbar (Đổi màu khi cuộn trang) ---
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('glass-nav');
+                    navbar.classList.remove('py-4');
+                    navbar.classList.add('py-2');
+                } else {
+                    navbar.classList.remove('glass-nav');
+                    navbar.classList.remove('py-2');
+                    navbar.classList.add('py-4');
+                }
+            });
+
+            // --- 2. Mobile Menu Toggle ---
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function toggleMenu() {
+                mobileMenu.classList.toggle('translate-x-full');
+            }
+
+            mobileMenuBtn.addEventListener('click', toggleMenu);
+            closeMenuBtn.addEventListener('click', toggleMenu);
+            
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', toggleMenu);
+            });
+
+            // --- 3. Scroll Reveal Animation (Hiệu ứng hiện ra khi cuộn) ---
+            const revealElements = document.querySelectorAll('.reveal');
+            
+            const revealOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, revealOptions);
+
+            revealElements.forEach(el => {
+                revealOnScroll.observe(el);
+            });
+
+            // --- 4. Menu Filtering (Lọc thực đơn) ---
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const menuItems = document.querySelectorAll('.menu-item');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active button styles
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active', 'text-white', 'border-gold');
+                        b.classList.add('text-gray-500', 'border-transparent');
+                    });
+                    btn.classList.add('active', 'text-white', 'border-gold');
+                    btn.classList.remove('text-gray-500', 'border-transparent');
+
+                    const filterValue = btn.getAttribute('data-filter');
+
+                    menuItems.forEach(item => {
+                        if (filterValue === 'all') {
+                            item.classList.remove('hide');
+                            setTimeout(() => item.style.opacity = '1', 50);
+                        } else {
+                            if (item.classList.contains(filterValue)) {
+                                item.classList.remove('hide');
+                                setTimeout(() => item.style.opacity = '1', 50);
+                            } else {
+                                item.style.opacity = '0';
+                                setTimeout(() => item.classList.add('hide'), 400); // Wait for transition
+                            }
+                        }
+                    });
+                });
+            });
+
+            // --- 5. Scroll To Top Button ---
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 500) {
+                    scrollToTopBtn.classList.remove('translate-y-20', 'opacity-0');
+                    scrollToTopBtn.classList.add('translate-y-0', 'opacity-100');
+                } else {
+                    scrollToTopBtn.classList.add('translate-y-20', 'opacity-0');
+                    scrollToTopBtn.classList.remove('translate-y-0', 'opacity-100');
+                }
+            });
+
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // --- 6. Form Validation (Kiểm tra form đặt bàn) ---
+            const form = document.getElementById('reservation-form');
+            const nameInput = document.getElementById('name');
+            const emailInput = document.getElementById('email');
+            const phoneInput = document.getElementById('phone');
+            const successMsg = document.getElementById('form-success');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = true;
+
+                // Simple validation logic
+                if (nameInput.value.trim() === '') {
+                    document.getElementById('name-error').classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    document.getElementById('name-error').classList.add('hidden');
+                }
+
+                if (!emailInput.value.includes('@') || emailInput.value.trim() === '') {
+                    document.getElementById('email-error').classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    document.getElementById('email-error').classList.add('hidden');
+                }
+
+                if (phoneInput.value.trim() === '') {
+                    document.getElementById('phone-error').classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    document.getElementById('phone-error').classList.add('hidden');
+                }
+
+                if (isValid) {
+                    // Simulate API Call / Đang xử lý
+                    const btn = form.querySelector('button[type="submit"]');
+                    const originalText = btn.innerText;
+                    btn.innerText = 'Đang xử lý...';
+                    btn.disabled = true;
+
+                    setTimeout(() => {
+                        form.reset();
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                        successMsg.classList.remove('hidden');
+                        
+                        // Ẩn thông báo sau 5 giây
+                        setTimeout(() => {
+                            successMsg.classList.add('hidden');
+                        }, 5000);
+                    }, 1500);
+                }
+            });
+
+            // Setup giới hạn Date picker không được chọn ngày trong quá khứ
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.setAttribute('min', today);
+            }
+        });
+    </script>
+</body>
+</html>
